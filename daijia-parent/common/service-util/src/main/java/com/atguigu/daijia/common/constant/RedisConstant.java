@@ -5,8 +5,8 @@ public class RedisConstant {
     //用户登录
     public static final String USER_LOGIN_KEY_PREFIX = "user:login:";
     public static final String USER_LOGIN_REFRESH_KEY_PREFIX = "user:login:refresh:";
-    public static final int USER_LOGIN_KEY_TIMEOUT = 60 * 60 * 24 * 100;
-    public static final int USER_LOGIN_REFRESH_KEY_TIMEOUT = 60 * 60 * 24 * 365;
+    public static final int USER_LOGIN_KEY_TIMEOUT = 60 * 60 * 10;
+    public static final int USER_LOGIN_REFRESH_KEY_TIMEOUT = 60 * 60 * 10;
 
     //司机GEO地址
     public static final String DRIVER_GEO_LOCATION = "driver:geo:location";

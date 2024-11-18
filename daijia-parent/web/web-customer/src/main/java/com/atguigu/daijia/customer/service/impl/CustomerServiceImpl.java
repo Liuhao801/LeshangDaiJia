@@ -31,17 +31,17 @@ public class CustomerServiceImpl implements CustomerService {
         //1、远程调用接口，获取用户openid
         Result<Long> loginResult = customerInfoFeignClient.login(code);
 
-        //2、判断接口调用是否成功
-        Integer resultCode = loginResult.getCode();
-        if (resultCode != 200) {
-            throw new GuiguException(ResultCodeEnum.DATA_ERROR);
-        }
-
-        //3、判断openid是否为空，如果为空，返回错误信息
+//        //2、判断接口调用是否成功
+//        Integer resultCode = loginResult.getCode();
+//        if (resultCode != 200) {
+//            throw new GuiguException(ResultCodeEnum.DATA_ERROR);
+//        }
+//
+//        //3、判断openid是否为空，如果为空，返回错误信息
         Long userId = loginResult.getData();
-        if (userId == null) {
-            throw new GuiguException(ResultCodeEnum.DATA_ERROR);
-        }
+//        if (userId == null) {
+//            throw new GuiguException(ResultCodeEnum.DATA_ERROR);
+//        }
 
         //4、生成token，将token和userId存入redis,并设置过期时间
         String token = UUID.randomUUID().toString(true);
@@ -59,10 +59,10 @@ public class CustomerServiceImpl implements CustomerService {
         //3、远程调用接口，获取用户信息
         Result<CustomerLoginVo> customerLoginInfo = customerInfoFeignClient.getCustomerLoginInfo(userId);
 
-        //4、判断接口调用是否成功
-        if(customerLoginInfo.getCode()!=200){
-            throw new GuiguException(ResultCodeEnum.DATA_ERROR);
-        }
+//        //4、判断接口调用是否成功
+//        if(customerLoginInfo.getCode()!=200){
+//            throw new GuiguException(ResultCodeEnum.DATA_ERROR);
+//        }
 
         //5、返回用户信息
         CustomerLoginVo customerLoginVo = customerLoginInfo.getData();

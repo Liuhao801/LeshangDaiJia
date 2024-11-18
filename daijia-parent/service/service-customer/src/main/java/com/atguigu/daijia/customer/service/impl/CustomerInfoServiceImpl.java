@@ -44,7 +44,7 @@ public class CustomerInfoServiceImpl extends ServiceImpl<CustomerInfoMapper, Cus
             WxMaJscode2SessionResult sessionInfo = wxMaService.getUserService().getSessionInfo(code);
             opedId = sessionInfo.getOpenid();
         } catch (WxErrorException e) {
-            throw new GuiguException(ResultCodeEnum.FAIL);
+            throw new GuiguException(ResultCodeEnum.DATA_ERROR);
         }
 
         //2、根据openId查询用户是否存在

@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.*;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class CustomerController {
     @Autowired
-    private CustomerService customerInfoService;
+    private CustomerService CustomerService;
 
     @Operation(summary = "小程序授权登录")
     @GetMapping("/login/{code}")
     public Result<String> wxLogin(@PathVariable String code) {
-        return Result.ok(customerInfoService.login(code));
+        return Result.ok(CustomerService.login(code));
     }
 
     @Operation(summary = "获取客户登录信息")
@@ -35,7 +35,7 @@ public class CustomerController {
         //从threadLocal中获取userId
         Long userId = AuthContextHolder.getUserId();
         //调用service
-        CustomerLoginVo customerLoginVo = customerInfoService.getCustomerLoginInfo(userId);
+        CustomerLoginVo customerLoginVo = CustomerService.getCustomerLoginInfo(userId);
 
         return Result.ok(customerLoginVo);
     }
@@ -45,7 +45,7 @@ public class CustomerController {
     @PostMapping("/updateWxPhone")
     public Result<Boolean> updateWxPhone(@RequestBody UpdateWxPhoneForm updateWxPhoneForm) {
         updateWxPhoneForm.setCustomerId(AuthContextHolder.getUserId());
-        return Result.ok(customerInfoService.updateWxPhoneNumber(updateWxPhoneForm));
+        return Result.ok(CustomerService.updateWxPhoneNumber(updateWxPhoneForm));
     }
 }
 
