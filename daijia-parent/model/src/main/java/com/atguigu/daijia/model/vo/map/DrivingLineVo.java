@@ -1,6 +1,6 @@
 package com.atguigu.daijia.model.vo.map;
 
-import com.alibaba.fastjson.JSONArray;
+import cn.hutool.json.JSONArray;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
