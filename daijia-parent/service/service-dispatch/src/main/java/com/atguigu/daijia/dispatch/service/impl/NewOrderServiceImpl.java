@@ -57,10 +57,10 @@ public class NewOrderServiceImpl implements NewOrderService {
             //创建任务调度
             // String executorHandler 执行任务job方法
             // String param
-            // String corn 执行cron表达式 每10s执行一次
+            // String corn 执行cron表达式 每5s执行一次
             // String desc 描述信息
             Long jobId = xxlJobClient.addJob("newOrderTaskHandler", "",
-                    "0/10 * * * * ?",
+                    "0/5 * * * * ?",
                     "新创建订单任务调度：" + newOrderTaskVo.getOrderId());
 
             //记录任务调度信息

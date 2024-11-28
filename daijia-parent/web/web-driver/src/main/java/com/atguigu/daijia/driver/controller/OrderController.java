@@ -40,5 +40,14 @@ public class OrderController {
         Long driverId = AuthContextHolder.getUserId();
         return Result.ok(orderService.findNewOrderQueueData(driverId));
     }
+
+    @Operation(summary = "查找司机端当前订单")
+    @GuiguLogin
+    @GetMapping("/searchDriverCurrentOrder")
+    public Result<CurrentOrderInfoVo> searchDriverCurrentOrder() {
+        CurrentOrderInfoVo currentOrderInfoVo = new CurrentOrderInfoVo();
+        currentOrderInfoVo.setIsHasCurrentOrder(false);
+        return Result.ok(currentOrderInfoVo);
+    }
 }
 
