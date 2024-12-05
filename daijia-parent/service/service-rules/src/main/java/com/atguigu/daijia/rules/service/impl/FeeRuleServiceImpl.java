@@ -5,6 +5,7 @@ import com.atguigu.daijia.model.form.rules.FeeRuleRequest;
 import com.atguigu.daijia.model.form.rules.FeeRuleRequestForm;
 import com.atguigu.daijia.model.vo.rules.FeeRuleResponse;
 import com.atguigu.daijia.model.vo.rules.FeeRuleResponseVo;
+import com.atguigu.daijia.rules.config.DroolsHelper;
 import com.atguigu.daijia.rules.mapper.FeeRuleMapper;
 import com.atguigu.daijia.rules.service.FeeRuleService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,7 @@ public class FeeRuleServiceImpl implements FeeRuleService {
         feeRuleRequest.setWaitMinute(calculateOrderFeeForm.getWaitMinute());
 
         //Drools使用
-        KieSession kieSession = kieContainer.newKieSession();
+        KieSession kieSession = DroolsHelper.loadForRule("rules/FeeRule.drl");
 
         //封装返回对象
         FeeRuleResponse feeRuleResponse = new FeeRuleResponse();

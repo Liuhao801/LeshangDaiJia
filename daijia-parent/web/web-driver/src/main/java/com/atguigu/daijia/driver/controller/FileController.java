@@ -18,14 +18,23 @@ public class FileController {
     @Autowired
     private CosService cosService;
 
-    //文件上传接口
-    @Operation(summary = "上传文件到腾讯cos")
-    //@GuiguLogin
-    @PostMapping("/upload")
-    public Result<String> upload(@RequestPart("file") MultipartFile file,
-                                 @RequestParam(name = "path",defaultValue = "auth") String path) {
-        CosUploadVo cosUploadVo = cosService.uploadFile(file,path);
-        return Result.ok(cosUploadVo.getShowUrl());
+    @Autowired
+    private FileService fileService;
+
+    @Operation(summary = "Minio文件上传")
+    @PostMapping("upload")
+    public Result<String> upload(@RequestPart("file") MultipartFile file) {
+        return Result.ok(fileService.upload(file));
     }
+
+//    //文件上传接口
+//    @Operation(summary = "上传文件到腾讯cos")
+//    //@GuiguLogin
+//    @PostMapping("/upload")
+//    public Result<String> upload(@RequestPart("file") MultipartFile file,
+//                                 @RequestParam(name = "path",defaultValue = "auth") String path) {
+//        CosUploadVo cosUploadVo = cosService.uploadFile(file,path);
+//        return Result.ok(cosUploadVo.getShowUrl());
+//    }
 
 }
