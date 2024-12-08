@@ -12,7 +12,9 @@ import com.atguigu.daijia.model.form.order.OrderInfoForm;
 import com.atguigu.daijia.model.form.order.StartDriveForm;
 import com.atguigu.daijia.model.form.order.UpdateOrderBillForm;
 import com.atguigu.daijia.model.form.order.UpdateOrderCartForm;
+import com.atguigu.daijia.model.vo.base.PageVo;
 import com.atguigu.daijia.model.vo.order.CurrentOrderInfoVo;
+import com.atguigu.daijia.model.vo.order.OrderListVo;
 import com.atguigu.daijia.order.mapper.OrderBillMapper;
 import com.atguigu.daijia.order.mapper.OrderInfoMapper;
 import com.atguigu.daijia.order.mapper.OrderProfitsharingMapper;
@@ -20,6 +22,8 @@ import com.atguigu.daijia.order.mapper.OrderStatusLogMapper;
 import com.atguigu.daijia.order.service.OrderInfoService;
 import com.atguigu.daijia.order.service.OrderMonitorService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -170,7 +174,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
                 OrderStatus.END_SERVICE.getStatus(),
                 OrderStatus.UNPAID.getStatus()
         };
-        queryWrapper.in(OrderInfo::getStatus, (Object) statusArray);
+        queryWrapper.in(OrderInfo::getStatus, statusArray);
         queryWrapper.orderByDesc(OrderInfo::getId);
         queryWrapper.last("limit 1");
         OrderInfo orderInfo = orderInfoMapper.selectOne(queryWrapper);
@@ -188,9 +192,9 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     //司机端查找当前订单
     @Override
     public CurrentOrderInfoVo searchDriverCurrentOrder(Long driverId) {
-        //封装条件
-        LambdaQueryWrapper<OrderInfo> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(OrderInfo::getDriverId,driverId);
+        LambdaQueryWrapper<OrderInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(OrderInfo::getDriverId, driverId);
+        //司机发送完账单，司机端主要流程就走完（当前这些节点，司机端会调整到相应的页面处理逻辑）
         Integer[] statusArray = {
                 OrderStatus.ACCEPTED.getStatus(),
                 OrderStatus.DRIVER_ARRIVED.getStatus(),
@@ -198,11 +202,10 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
                 OrderStatus.START_SERVICE.getStatus(),
                 OrderStatus.END_SERVICE.getStatus()
         };
-        wrapper.in(OrderInfo::getStatus, (Object) statusArray);
-        wrapper.orderByDesc(OrderInfo::getId);
-        wrapper.last(" limit 1");
-        OrderInfo orderInfo = orderInfoMapper.selectOne(wrapper);
-        //封装到vo
+        queryWrapper.in(OrderInfo::getStatus, statusArray);
+        queryWrapper.orderByDesc(OrderInfo::getId);
+        queryWrapper.last("limit 1");
+        OrderInfo orderInfo = orderInfoMapper.selectOne(queryWrapper);
         CurrentOrderInfoVo currentOrderInfoVo = new CurrentOrderInfoVo();
         if(null != orderInfo) {
             currentOrderInfoVo.setStatus(orderInfo.getStatus());
@@ -322,12 +325,25 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
             OrderProfitsharing orderProfitsharing = new OrderProfitsharing();
             BeanUtils.copyProperties(updateOrderBillForm, orderProfitsharing);
             orderProfitsharing.setOrderId(updateOrderBillForm.getOrderId());
-            orderProfitsharing.setRuleId(updateOrderBillForm.getProfitsharingRuleId());
+            //orderProfitsharing.setRuleId(updateOrderBillForm.getProfitsharingRuleId());
+            orderProfitsharing.setRuleId(1L);
             orderProfitsharing.setStatus(1);
             orderProfitsharingMapper.insert(orderProfitsharing);
         } else {
             throw new GuiguException(ResultCodeEnum.UPDATE_ERROR);
         }
         return true;
+    }
+
+    @Override
+    public PageVo findCustomerOrderPage(Page<OrderInfo> pageParam, Long customerId) {
+        IPage<OrderListVo> pageInfo = orderInfoMapper.selectCustomerOrderPage(pageParam, customerId);
+        return new PageVo(pageInfo.getRecords(), pageInfo.getPages(), pageInfo.getTotal());
+    }
+
+    @Override
+    public PageVo findDriverOrderPage(Page<OrderInfo> pageParam, Long driverId) {
+        IPage<OrderListVo> pageInfo = orderInfoMapper.selectDriverOrderPage(pageParam, driverId);
+        return new PageVo(pageInfo.getRecords(), pageInfo.getPages(), pageInfo.getTotal());
     }
 }
