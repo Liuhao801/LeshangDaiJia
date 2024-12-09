@@ -23,4 +23,12 @@ public interface CustomerInfoFeignClient {
     //更新客户微信手机号码
     @PostMapping("/customer/info/updateWxPhoneNumber")
     Result<Boolean> updateWxPhoneNumber(@RequestBody UpdateWxPhoneForm updateWxPhoneForm);
+
+    /**
+     * 获取客户OpenId
+     * @param customerId
+     * @return
+     */
+    @GetMapping("/customer/info/getCustomerOpenId/{customerId}")
+    Result<String> getCustomerOpenId(@PathVariable("customerId") Long customerId);
 }

@@ -49,4 +49,7 @@ public interface OrderService {
 
     //获取司机订单分页列表
     PageVo findDriverOrderPage(Long driverId, Long page, Long limit);
+
+    //司机发送账单信息
+    Boolean sendOrderBillInfo(Long orderId, Long driverId);
 }

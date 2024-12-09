@@ -43,6 +43,7 @@ public enum ResultCodeEnum {
     AUTH_ERROR( 217, "认证通过后才可以开启代驾服务"),
     FACE_ERROR( 250, "当日未进行人脸识别"),
     FACE_FAIL( 250, "人脸识别失败"),
+    WX_PAY_ERROR( 250, "微信支付失败"),
 
     COUPON_EXPIRE( 250, "优惠券已过期"),
     COUPON_LESS( 250, "优惠券库存不足"),

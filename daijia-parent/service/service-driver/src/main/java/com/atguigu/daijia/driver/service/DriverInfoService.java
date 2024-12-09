@@ -40,4 +40,7 @@ public interface DriverInfoService extends IService<DriverInfo> {
 
     //获取司机基本信息
     DriverInfoVo getDriverInfoOrder(Long driverId);
+
+    //获取司机OpenId
+    String getDriverOpenId(Long driverId);
 }
