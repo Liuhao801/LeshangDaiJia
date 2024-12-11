@@ -10,6 +10,8 @@ import com.atguigu.daijia.model.vo.order.*;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.math.BigDecimal;
+
 public interface OrderInfoService extends IService<OrderInfo> {
 
     //保存订单信息
@@ -68,4 +70,7 @@ public interface OrderInfoService extends IService<OrderInfo> {
 
     //取消订单
     void orderCancel(long l);
+
+    //更新订单优惠券金额
+    Boolean updateCouponAmount(Long orderId, BigDecimal couponAmount);
 }
